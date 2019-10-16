@@ -20,7 +20,15 @@ const commission = {
 
 
 router.get('/commissions', async (ctx, next) => {
-   const {data} = await axios.get('https://uat.beacon-tech.net/tss/reference-data/commissions')
+   const {data} = await axios({
+       method: 'get',
+       url:'https://uat.beacon-tech.net/tss/reference-data/commissions',
+       headers: {
+        'Content-Type': 'application/json',
+        'X-Auth-Token': '68a42e76dc6bbe61f5a49220cefdfa0440a1e77d66db5ae8c3dd2a7467d8aca4937922f6cc29'
+      } 
+
+    })
    ctx.body = data;
    await next();
 });
