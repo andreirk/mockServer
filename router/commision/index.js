@@ -33,30 +33,27 @@ router.get('/commissions', async (ctx, next) => {
    await next();
 });
 
-router.post('/commissions/new', async (ctx, next) => {
-    
-    console.log('new commission route', ctx.request.body);
-    if( isNaN(parseInt(ctx.request.body.account))){
-        ctx.response.status = 400;
-        ctx.response.body = {
-            "name":"Bad Request",
-            "message":"execute.tradecommission: Either Sedol or Currency and Symbol are required",
-            "violations": [
-               { 
-                "field": "account",
-                "message":"Accound field must be correct"
-               },
-               { 
-                "field": "cedol",
-                "message":"Either Sedol or Currency and Symbol are required"
-               }
-            ]
-         }
-        
-    } else {
-        ctx.status = 200;
-    } 
-    
+router.put('/commissions/:id', async (ctx, next) => {
+    const id = ctx.params.id;
+    const body = JSON.stringify(ctx.request.body);
+    console.log('new commission route', {id, body});
+    try {
+    const {data} = await axios({
+        method: 'put',
+        url:'https://uat.beacon-tech.net/tss/reference-data/commissions/'+ id,
+        data: body,
+        headers: {
+         'Content-Type': 'application/json',
+         'X-Auth-Token': '68a42e76dc6bbe61f5a49220cefdfa0440a1e77d66db5ae8c3dd2a7467d8aca4937922f6cc29'
+       } 
+ 
+     })
+     console.log('responce in local server', data)
+     ctx.body = data;
+    } catch(e) {
+        console.log('error in Responce', e)
+    }
+     
     await next();
     
 });
