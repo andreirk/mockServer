@@ -18,6 +18,16 @@ const commission = {
     "requestId":"ABC123457"
  }
 
+ router.post('/login', async (ctx, next) => {
+    // ctx.response.status = 400;
+    // ctx.response.body = 'Bad Request';
+    
+     ctx.body = {
+         userName: "Andrey",
+         token: 'some token'
+     }
+     await next();
+ })
 
 router.get('/commissions', async (ctx, next) => {
    const {data} = await axios({
@@ -53,9 +63,28 @@ router.put('/commissions/:id', async (ctx, next) => {
     } catch(e) {
         console.log('error in Responce', e)
     }
-     
     await next();
-    
+});
+
+router.delete('/commissions/:id', async (ctx, next) => {
+    const id = ctx.params.id;
+    try {
+    const responce = await axios({
+        method: 'delete',
+        body: {},
+        url:'https://uat.beacon-tech.net/tss/reference-data/commissions/'+ id,
+        headers: {
+         'Content-Type': 'application/json',
+         'X-Auth-Token': '68a42e76dc6bbe61f5a49220cefdfa0440a1e77d66db5ae8c3dd2a7467d8aca4937922f6cc29'
+       } 
+ 
+     })
+     console.log('responce in local server', data)
+     ctx.body = responce;
+    } catch(e) {
+        console.log('error in Responce', e)
+    }
+    await next();
 });
 
 router.post('/commissions', async (ctx, next) => {
