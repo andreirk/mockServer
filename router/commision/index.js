@@ -58,6 +58,31 @@ router.put('/commissions/:id', async (ctx, next) => {
     
 });
 
+router.post('/commissions', async (ctx, next) => {
+    const id = ctx.params.id;
+    const body = JSON.stringify(ctx.request.body);
+    console.log('new commission route', {id, body});
+    try {
+    const {data} = await axios({
+        method: 'post',
+        url:'https://uat.beacon-tech.net/tss/reference-data/commissions',
+        data: body,
+        headers: {
+         'Content-Type': 'application/json',
+         'X-Auth-Token': '68a42e76dc6bbe61f5a49220cefdfa0440a1e77d66db5ae8c3dd2a7467d8aca4937922f6cc29'
+       } 
+ 
+     })
+     console.log('responce in local server', data)
+     ctx.body = data;
+    } catch(e) {
+        console.log('error in Responce', e)
+    }
+     
+    await next();
+    
+});
+
 router.post('/commissions/update', async (ctx, next) => {
     console.log('update commission route', ctx.request.body);
     ctx.status = 200;
