@@ -18,6 +18,9 @@ const commission = {
     "requestId":"ABC123457"
  }
 
+
+
+
  router.post('/login', async (ctx, next) => {
     // ctx.response.status = 400;
     // ctx.response.body = 'Bad Request';
@@ -48,7 +51,7 @@ router.put('/commissions/:id', async (ctx, next) => {
     const body = JSON.stringify(ctx.request.body);
     console.log('new commission route', {id, body});
     try {
-    const {data} = await axios({
+    const {data, status} = await axios({
         method: 'put',
         url:'https://uat.beacon-tech.net/tss/reference-data/commissions/'+ id,
         data: body,
@@ -59,6 +62,7 @@ router.put('/commissions/:id', async (ctx, next) => {
  
      })
      console.log('responce in local server', data)
+     ctx.status = status;
      ctx.body = data;
     } catch(e) {
         console.log('error in Responce', e)
@@ -80,6 +84,7 @@ router.delete('/commissions/:id', async (ctx, next) => {
  
      })
      console.log('responce in local server', data)
+     ctx.status = responce.status;
      ctx.body = responce;
     } catch(e) {
         console.log('error in Responce', e)
@@ -92,7 +97,7 @@ router.post('/commissions', async (ctx, next) => {
     const body = JSON.stringify(ctx.request.body);
     console.log('new commission route', {id, body});
     try {
-    const {data} = await axios({
+    const {data, status} = await axios({
         method: 'post',
         url:'https://uat.beacon-tech.net/tss/reference-data/commissions',
         data: body,
@@ -103,6 +108,7 @@ router.post('/commissions', async (ctx, next) => {
  
      })
      console.log('responce in local server', data)
+     ctx.status = status;
      ctx.body = data;
     } catch(e) {
         console.log('error in Responce', e)
